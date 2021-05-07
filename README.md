@@ -1,0 +1,2 @@
+# PAProiect
+Scrabble in Java
