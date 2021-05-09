@@ -1,2 +1,2 @@
-# PAProiect
-Scrabble in Java
+# PA Project
+Backgammon in Java
