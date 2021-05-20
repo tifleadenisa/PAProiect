@@ -4,14 +4,14 @@ import com.PAProiect.gameComponents.Dice;
 import com.PAProiect.gameComponents.Player;
 import com.PAProiect.utils.Pair;
 
-public class TableMoves {
+public class TableMovesInside {
     private Table table;
 
-    public TableMoves() {
+    public TableMovesInside() {
         table = new Table();
     }
 
-    public TableMoves(Table table) {
+    public TableMovesInside(Table table) {
         this.table = table;
     }
 
@@ -103,6 +103,7 @@ public class TableMoves {
         }
     }
 
+    //in case both players have all checkers in board
     public Table makeMove(Player player, Integer actualPosition, Integer landingPosition, Dice dice){
         Pair<Player, Integer> arc = table.getArc(actualPosition);
         if(validateMove(actualPosition, landingPosition,arc, dice) == 0){
@@ -136,4 +137,6 @@ public class TableMoves {
         }
         return table;
     }
+
+
 }

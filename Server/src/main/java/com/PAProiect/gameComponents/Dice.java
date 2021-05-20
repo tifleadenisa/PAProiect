@@ -3,19 +3,20 @@ package com.PAProiect.gameComponents;
 import java.util.Random;
 
 public class Dice {
-    private final int dice;
 
-    public Dice(){
+    private final Integer dice;
+
+    public Dice() {
         dice = generateNumber();
     }
 
     //generates number between 1 and 6
-    private int generateNumber(){
+    private static int generateNumber(){
         Random randomGenerator=new Random();
         return randomGenerator.nextInt(6) + 1;
     }
 
-    public int getDice() {
+    public Integer getDice() {
         return dice;
     }
 }
