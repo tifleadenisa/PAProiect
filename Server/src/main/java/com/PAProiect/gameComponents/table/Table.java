@@ -4,7 +4,9 @@ import com.PAProiect.gameComponents.Player;
 import com.PAProiect.utils.Pair;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Table {
@@ -12,6 +14,7 @@ public class Table {
     //on every arc there is a player(or not) with a number of chips
     public static Integer NOOFARCS = 24;
     private List<Pair<Player, Integer>> arcs;
+    private Map<Player, Integer> hittedBlots;
 
     private void initializeArcs(){
         arcs = new ArrayList<>();
@@ -93,6 +96,9 @@ public class Table {
 
     public Table(){
         initializeArcs();
+        hittedBlots = new HashMap<>();
+        hittedBlots.put(Player.BLACK,0);
+        hittedBlots.put(Player.WHITE, 0);
     }
 
     public List<Pair<Player, Integer>> getArcs() {
@@ -109,5 +115,21 @@ public class Table {
 
     public void setArc(Integer position, Pair<Player, Integer> arc){
         arcs.set(position, arc);
+    }
+
+    public Map<Player, Integer> getHittedBlots() {
+        return hittedBlots;
+    }
+
+    public void setHittedBlots(Map<Player, Integer> hittedBlots) {
+        this.hittedBlots = hittedBlots;
+    }
+
+    public void setPlayerHittedBlots(Player player, Integer noOfBlots){
+        hittedBlots.replace(player, noOfBlots);
+    }
+
+    public Integer getPlayerHittedBlots(Player player){
+        return hittedBlots.get(player);
     }
 }
