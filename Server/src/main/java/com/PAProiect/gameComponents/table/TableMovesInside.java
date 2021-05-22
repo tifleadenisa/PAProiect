@@ -104,35 +104,38 @@ public class TableMovesInside {
     }
 
     //in case both players have all checkers in board
-    public Table makeMove(Player player, Integer actualPosition, Integer landingPosition, Dice dice){
+    public Table extractChecker(Player player, Integer actualPosition, Dice dice){
         Pair<Player, Integer> arc = table.getArc(actualPosition);
-        if(validateMove(actualPosition, landingPosition,arc, dice) == 0){
-            //add the first chip on that arc
-            if(isLandingPositionOk(player, landingPosition) == 0){
-               if(arc.getValue() == 1){
-                   arc.setKey(Player.NOPLAYER);
-                   arc.setValue(0);
-               }else{
-                   arc.setValue(arc.getValue() - 1);
-               }
-               table.getArc(landingPosition).setValue(table.getArc(landingPosition).getValue() + 1);
-            }else if(isLandingPositionOk(player, landingPosition) == 1){
-                //adauga o piesa pe arcul cu piese existente de-ale userului
-                //adauga piesa celuilalt user pe mijloc
-                table.setPlayerHittedBlots(table.getArc(landingPosition).getKey(), table.getPlayerHittedBlots(table.getArc(landingPosition).getKey())+1);
-                //make move
-                table.getArc(landingPosition).setKey(player);
-                table.getArc(landingPosition).setValue(1);
-            }
-        }else if (validateMove(actualPosition, landingPosition,arc, dice) == -1){
-            if(isLandingPositionOk(player, landingPosition) == 0){
-                table.setPlayerHittedBlots(player, table.getPlayerHittedBlots(player)-1);
-                table.getArc(landingPosition).setValue(table.getArc(landingPosition).getValue() + 1);
-            }else if(isLandingPositionOk(player, landingPosition) == 1){
-                table.setPlayerHittedBlots(table.getArc(landingPosition).getKey(), table.getPlayerHittedBlots(table.getArc(landingPosition).getKey())+1);
-                //make move
-                table.getArc(landingPosition).setKey(player);
-                table.getArc(landingPosition).setValue(1);
+        Integer landingPosition = expectedMove(actualPosition, arc, dice);
+        if(landingPosition != -1){
+            if(validateMove(actualPosition, landingPosition,arc, dice) == 0){
+                //add the first chip on that arc
+                if(isLandingPositionOk(player, landingPosition) == 0){
+                    if(arc.getValue() == 1){
+                        arc.setKey(Player.NOPLAYER);
+                        arc.setValue(0);
+                    }else{
+                        arc.setValue(arc.getValue() - 1);
+                    }
+                    table.getArc(landingPosition).setValue(table.getArc(landingPosition).getValue() + 1);
+                }else if(isLandingPositionOk(player, landingPosition) == 1){
+                    //adauga o piesa pe arcul cu piese existente de-ale userului
+                    //adauga piesa celuilalt user pe mijloc
+                    table.setPlayerHittedBlots(table.getArc(landingPosition).getKey(), table.getPlayerHittedBlots(table.getArc(landingPosition).getKey())+1);
+                    //make move
+                    table.getArc(landingPosition).setKey(player);
+                    table.getArc(landingPosition).setValue(1);
+                }
+            }else if (validateMove(actualPosition, landingPosition,arc, dice) == -1){
+                if(isLandingPositionOk(player, landingPosition) == 0){
+                    table.setPlayerHittedBlots(player, table.getPlayerHittedBlots(player)-1);
+                    table.getArc(landingPosition).setValue(table.getArc(landingPosition).getValue() + 1);
+                }else if(isLandingPositionOk(player, landingPosition) == 1){
+                    table.setPlayerHittedBlots(table.getArc(landingPosition).getKey(), table.getPlayerHittedBlots(table.getArc(landingPosition).getKey())+1);
+                    //make move
+                    table.getArc(landingPosition).setKey(player);
+                    table.getArc(landingPosition).setValue(1);
+                }
             }
         }
         return table;

@@ -132,4 +132,27 @@ public class Table {
     public Integer getPlayerHittedBlots(Player player){
         return hittedBlots.get(player);
     }
+
+    public boolean isAllCheckersInHouse(Player player){
+        //all checkers must be in the 1-6 arcs
+        if(hittedBlots.get(player) == 0){
+            if(player == Player.BLACK){
+                for (int arcNumber = 6; arcNumber < Table.NOOFARCS; arcNumber++) {
+                    if(this.getArc(arcNumber).getKey() == player)
+                        return false;
+                }
+                return true;
+            }else{
+                //all checkers must be in the 19-24 arcs
+                for (int arcNumber = 0; arcNumber < Table.NOOFARCS-6; arcNumber++) {
+                    if(this.getArc(arcNumber).getKey() == player)
+                        return false;
+                }
+                return true;
+            }
+        }else{
+            return false;
+        }
+
+    }
 }

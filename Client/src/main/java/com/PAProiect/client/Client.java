@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class Client {
 
-    private static void connectToServer() throws IOException {
+    public static void connectToServer() throws IOException {
         String serverAddress = "127.0.0.1";
         int PORT = 8100;
         try (
@@ -17,7 +17,7 @@ public class Client {
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader (new InputStreamReader(socket.getInputStream()))
         ) {
-            String commandLine;
+            /*String commandLine;
             BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
 
             while (true) {
@@ -40,7 +40,8 @@ public class Client {
                     }
 
                 }
-            }
+            }*/
+            System.out.println("Connected!");
         } catch (ConnectException e){
             System.out.println("There are too much players in game! Come back later!");
         }
