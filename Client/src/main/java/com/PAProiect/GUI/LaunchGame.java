@@ -1,31 +1,40 @@
 package com.PAProiect.GUI;
 
 import com.PAProiect.client.Client;
+import com.PAProiect.gameComponents.GameLogic;
+import com.PAProiect.gameComponents.Player;
+import com.PAProiect.gameComponents.table.Table;
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class LaunchGame  extends Application {
+    private static Player player;
+    private static Table table = new Table();
+    private Client client;
 
     public static void main(String[] args) {
         /*try {
-            Client.connectToServer();
+            Client client = new Client();
+            client.connectToServer();
+            table = client.getObjectReceived();
         } catch (IOException e) {
             e.printStackTrace();
         }*/
         launch(args);
     }
 
+    public static void setPlayer(Player player) {
+        LaunchGame.player = player;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage = Table.constructBaseTable();
+        GameLogic.getInstance().setTable(table);
+        TableGUI tableGUI = new TableGUI(player);
+        primaryStage = tableGUI.constructBaseTable();
         primaryStage.show();
+        if (!table.equals(GameLogic.getInstance().getTable())){
+            client.setTable(GameLogic.getInstance().getTable());
+        }
     }
 }

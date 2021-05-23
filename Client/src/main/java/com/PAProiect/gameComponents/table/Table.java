@@ -1,15 +1,13 @@
 package com.PAProiect.gameComponents.table;
 
-import com.PAProiect.gameComponents.Player;
 import com.PAProiect.utils.Pair;
+import com.PAProiect.gameComponents.Player;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 public class Table implements Serializable {
     private static final long serialVersionUID = 6529685098267757690L;
