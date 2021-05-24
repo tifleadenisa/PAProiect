@@ -7,19 +7,19 @@ import com.PAProiect.gameComponents.table.Table;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * Clasa LauncGame se ocupa de pornirea interfetei grafice a jocului
+ *
+ * @version May 2021
+ * @author Denisa Tiflea
+ */
+
 public class LaunchGame  extends Application {
-    private static Player player;
+    private static Player player = Player.BLACK;
     private static Table table = new Table();
-    private Client client;
+    //private static Client client;
 
     public static void main(String[] args) {
-        /*try {
-            Client client = new Client();
-            client.connectToServer();
-            table = client.getObjectReceived();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         launch(args);
     }
 
@@ -27,14 +27,23 @@ public class LaunchGame  extends Application {
         LaunchGame.player = player;
     }
 
+    public static Player getPlayer() {
+        return player;
+    }
+
+    public static Table getTable() {
+        return table;
+    }
+
+    public static void setTable(Table table) {
+        LaunchGame.table = table;
+    }
+
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         GameLogic.getInstance().setTable(table);
         TableGUI tableGUI = new TableGUI(player);
-        primaryStage = tableGUI.constructBaseTable();
+        primaryStage = TableGUI.constructBaseTable();
         primaryStage.show();
-        if (!table.equals(GameLogic.getInstance().getTable())){
-            client.setTable(GameLogic.getInstance().getTable());
-        }
     }
 }

@@ -1,10 +1,20 @@
 package com.PAProiect.server;
 
+import com.PAProiect.game.Game;
+import com.PAProiect.gameComponents.Player;
 import com.PAProiect.gameComponents.table.Table;
+import com.PAProiect.gameComponents.table.TableSingleton;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+/**
+ * Clasa ClientThread reprezinta un fir de executie creat de server pentru a realiza comunicarea intre server si 2 clienti simultan
+ *
+ * @version May 2021
+ * @author Denisa Tiflea
+ */
 
 public class ClientThread extends Thread{
 
@@ -16,37 +26,28 @@ public class ClientThread extends Thread{
         this.serverSocket = serverSocket;
     }
 
-    private void printAndFlush(PrintWriter printWriter, int response){
-        printWriter.println(response);
-        printWriter.flush();
-    }
-
     public void run() {
         try{
-            PrintWriter printOut = new PrintWriter(socket.getOutputStream());
-            printAndFlush(printOut, Server.playersCounter);
-            while(true) {
-                // Get the request from the input stream: client → server
-                /*BufferedReader in = new BufferedReader(
-                        new InputStreamReader(socket.getInputStream()));
-
-                String request = in.readLine();
-                // Send the response to the output stream: server → client
-                PrintWriter out = new PrintWriter(socket.getOutputStream());
-
-                if(request.startsWith("connect")){
-                    printAndFlush(out, "Server received the request ...connecting...");
-                    socket.close();
-                    break;
-                }else{
-                    printAndFlush(out, "Server received the message: " + request);
-                }*/
-                Table objectToSend=new Table();
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                out.writeObject(objectToSend);
-                out.flush();
+            TableSingleton.getInstance().setTable(new Table());
+            if (Server.playersCounter == 1) {
+                TableSingleton.getInstance().getTable().setPlayingUser(Player.BLACK);
+            } else {
+                TableSingleton.getInstance().getTable().setPlayingUser(Player.WHITE);
             }
+            do {
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject(TableSingleton.getInstance().getTable());
+                out.flush();
+
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                TableSingleton.getInstance().setTable((Table) in.readObject());
+
+            } while (Game.winner(TableSingleton.getInstance().getTable()).equals(Player.NOPLAYER));
+
         } catch (IOException e) {
+            e.printStackTrace();
+            Server.playersCounter--;
+        } catch ( ClassNotFoundException e){
             e.printStackTrace();
         } finally {
             try {

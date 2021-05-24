@@ -4,7 +4,7 @@ import javafx.scene.control.TextField;
 
 public class FieldValidation {
 
-    //Validate age
+    //Validate if input is int
     public static boolean isInt(TextField input){
         try{
             int number = Integer.parseInt(input.getText());

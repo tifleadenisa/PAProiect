@@ -4,6 +4,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * Clasa Server constituie serverul aplicatiei, acceptand un numar de 2 clienti
+ *
+ * @version May 2021
+ * @author Denisa Tiflea
+ */
+
 public class Server {
 
     public static final int MAX_NUMBER_PLAYERS = 2;

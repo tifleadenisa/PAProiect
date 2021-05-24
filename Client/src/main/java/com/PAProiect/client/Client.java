@@ -1,91 +1,76 @@
 package com.PAProiect.client;
 
 import com.PAProiect.GUI.LaunchGame;
-import com.PAProiect.gameComponents.Player;
 import com.PAProiect.gameComponents.table.Table;
 
 import java.io.*;
-import java.net.ConnectException;
 import java.net.Socket;
+
+/**
+ * Clasa Client se ocupa de comunicarea unui player cu serverul, primind si trimitand instante ale tablei
+ *                  pentru a actualiza tabla in functie de ceilalti jucatori
+ *
+ * @version May 2021
+ * @author Denisa Tiflea
+ */
 
 public class Client {
 
     private static Table settedTable = new Table();
-    private static Table table;
+    private static Table table = new Table();
     private static Table objectReceived = new Table();
+    public static Boolean sendTable = false;
+    public static Socket socket;
 
-    public Table getObjectReceived() {
+    static {
+        try {
+            socket = new Socket("127.0.0.1",  8100);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Table getObjectReceived() {
         return objectReceived;
     }
 
-    public void setTable(Table table) {
+    public static void setTable(Table table) {
         Client.table = table;
     }
 
-    public static void sendTable(Socket socket, Table table) throws IOException {
+    public static void sendTable(Table table) throws IOException {
+        System.out.println("IEEEI SEND TABLE");
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         out.writeObject(table);
         out.flush();
     }
 
+    public static Table receiveTable() throws IOException, ClassNotFoundException {
+        System.out.println("IN");
+        ObjectInputStream inn = new ObjectInputStream(socket.getInputStream());
+        objectReceived = (Table) inn.readObject();
+        LaunchGame.setPlayer(objectReceived.getPlayingUser());
+        return objectReceived;
+    }
+
     public static void connectToServer() throws IOException, ClassNotFoundException {
-        String serverAddress = "127.0.0.1";
-        int PORT = 8100;
-        try (
-                Socket socket = new Socket(serverAddress, PORT);
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader (new InputStreamReader(socket.getInputStream()))
-        ) {
-            String commandLine;
-            BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Connected!");
 
+        System.out.println("Connected!");
 
-            String playerNo = in.readLine();
-            while (true) {
-                /*//read the command
-                System.out.print("client>");
-                commandLine = console.readLine();
+        while (true) {
+            LaunchGame.setTable(receiveTable());
 
-                if (!commandLine.equals("")) {
+            LaunchGame.setPlayer(objectReceived.getPlayingUser());
 
-                    // Send a request to the server
-                    out.println(commandLine);
+            LaunchGame.main(new String[0]);
 
-                    // Wait the response from the server ("Hello World!")
-                    String response = in.readLine();
-                    System.out.println(response);
-                    //if stop or exit, stop the client
-                    if (commandLine.equals("exit") || commandLine.equals("stop")) {
-                        socket.close();
-                        break;
-                    }
-
-                }*/
-
-                ObjectInputStream inn = new ObjectInputStream(socket.getInputStream());
-                objectReceived = (Table) inn.readObject();
-
-
-                if(playerNo.equals("1")){
-                    LaunchGame.setPlayer(Player.BLACK);
-                }else {
-                    LaunchGame.setPlayer(Player.WHITE);
-                }
-
-                LaunchGame.main(new String[0]);
-
-                if(!table.equals(settedTable)){
-                    sendTable(socket,table);
-                }
-
+            System.out.println("OUT");
+            if(!table.equals(settedTable) || sendTable){
+                System.out.println("Am trimis");
+                sendTable(table);
             }
 
-        } catch (ConnectException e){
-            System.out.println("There are too much players in game! Come back later!");
-        } /*catch (ClassNotFoundException e){
-            System.out.println("Message: " + e.getMessage());
-        }*/
+        }
     }
 
     public static  void main(String[] args) throws IOException, ClassNotFoundException {

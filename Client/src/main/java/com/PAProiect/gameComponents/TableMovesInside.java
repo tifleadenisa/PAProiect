@@ -3,6 +3,14 @@ package com.PAProiect.gameComponents;
 import com.PAProiect.gameComponents.table.Table;
 import com.PAProiect.utils.Pair;
 
+/**
+ * Clasa TableMovesInside se ocupa de realizarea si validarea miscarilor dinauntrul tablei,
+ *                  pana ca cel putin unul din playeri sa poata scoate piese
+ *
+ * @version May 2021
+ * @author Denisa Tiflea
+ */
+
 public class TableMovesInside {
     private Table table;
 

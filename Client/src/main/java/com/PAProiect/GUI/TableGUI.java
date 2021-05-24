@@ -3,7 +3,6 @@ package com.PAProiect.GUI;
 import com.PAProiect.gameComponents.*;
 import com.PAProiect.utils.FieldValidation;
 import com.PAProiect.utils.Pair;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -14,21 +13,29 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
-
+import java.io.IOException;
 import java.util.List;
 
-public class TableGUI {
-    private Scene scene;
-    private StackPane stackPane = new StackPane();
-    private Stage stage;
+/**
+ * Clasa TableGUI se ocupa de afisarea, actualizarea interfetei grafice pentru jucator
+ * De asemenea, cererea pentru o mutare se realizeaza cu ajutorul butoanelor din GUI
+ *
+ * @version May 2021
+ * @author Denisa Tiflea
+ */
 
-    private Player actualPlayer;
+public class TableGUI {
+    private static Scene scene;
+    private static StackPane stackPane = new StackPane();
+    private static Stage stage;
+
+    private static Player actualPlayer;
 
     public TableGUI(Player actualPlayer) {
-        this.actualPlayer = actualPlayer;
+        TableGUI.actualPlayer = actualPlayer;
     }
 
-    private Polygon createDownTriangle(Point2D origin, String color){
+    private static Polygon createDownTriangle(Point2D origin, String color){
 
         Polygon triangle = new Polygon();
         triangle.getPoints().addAll(origin.getX(), origin.getY(),
@@ -38,7 +45,7 @@ public class TableGUI {
         return triangle;
     }
 
-    private void addDownTriangles(GridPane grid){
+    private static void addDownTriangles(GridPane grid){
         Polygon triangle;
         for (int column = 0; column < 13; column++) {
             if(column < 6){
@@ -61,7 +68,7 @@ public class TableGUI {
         }
     }
 
-    private Polygon createUpTriangle(Point2D origin, String color){
+    private static Polygon createUpTriangle(Point2D origin, String color){
         Polygon triangle = new Polygon();
         triangle.getPoints().addAll(origin.getX(), origin.getY(),
                 origin.getX()-25, origin.getY()+200,
@@ -70,7 +77,7 @@ public class TableGUI {
         return triangle;
     }
 
-    private void addUpTriangles(GridPane grid){
+    private static void addUpTriangles(GridPane grid){
         Polygon triangle;
         for (int column = 0; column < 13; column++) {
             if(column < 6){
@@ -93,7 +100,7 @@ public class TableGUI {
         }
     }
 
-    private GridPane setTable(){
+    private static GridPane setTable(){
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setVgap(30);
@@ -114,7 +121,7 @@ public class TableGUI {
         return grid;
     }
 
-    private Circle createCircle(String color){
+    private static Circle createCircle(String color){
         Circle circle = new Circle();
         circle.setCenterX(750);
         circle.setCenterY(500);
@@ -124,7 +131,7 @@ public class TableGUI {
         return circle;
     }
 
-    private Circle createTransparentCircle(){
+    private static Circle createTransparentCircle(){
         Circle circle = new Circle();
         circle.setCenterX(750);
         circle.setCenterY(500);
@@ -134,7 +141,12 @@ public class TableGUI {
         return circle;
     }
 
-    private GridPane play(){
+    public static void resetChips(){
+        stackPane.getChildren().remove(1);
+        constructBaseTable();
+    }
+
+    private static GridPane play(){
 
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
@@ -163,7 +175,6 @@ public class TableGUI {
             }
         }
 
-
         final String[] result = {"Dices: "};
         Button button = new Button("Set dices!");
 
@@ -183,8 +194,8 @@ public class TableGUI {
             }
             String str = sb.toString();
             nameLabel.setText(str);
-
         });
+
         GridPane.setConstraints(button, 0, 1);
         grid.getChildren().add(button);
 
@@ -210,24 +221,28 @@ public class TableGUI {
                     System.out.println("dice 1 is: " + dice1.getDice());
                     System.out.println("dice 2 is: " + dice2.getDice());
                     if(Integer.parseInt(diceNo.getText()) == 1){
-                        if(GameLogic.getInstance().executeMoves(actualPlayer,Integer.parseInt(actualPositionInput.getText()),dice1)){
-                            System.out.println("Could execute with Dice1");
-                            actualPlayer = GameLogic.getInstance().canMove();
-                            System.out.println(GameLogic.getInstance().getTable());
-                            stackPane.getChildren().remove(1);
-                            constructBaseTable();
-                        }else{
-                            System.out.println("Choose other chip!");
+                        try {
+                            if(GameLogic.getInstance().executeMoves(actualPlayer,Integer.parseInt(actualPositionInput.getText()),dice1)){
+                                System.out.println("Could execute with Dice1");
+                                System.out.println(GameLogic.getInstance().getTable());
+                                resetChips();
+                            }else{
+                                System.out.println("Choose other chip!");
+                            }
+                        } catch (IOException | ClassNotFoundException ioException) {
+                            ioException.printStackTrace();
                         }
                     }else{
-                        if (GameLogic.getInstance().executeMoves(actualPlayer, Integer.parseInt(actualPositionInput.getText()), dice2)) {
-                            System.out.println("Could execute with Dice2");
-                            actualPlayer = GameLogic.getInstance().canMove();
-                            System.out.println(GameLogic.getInstance().getTable());
-                            stackPane.getChildren().remove(1);
-                            constructBaseTable();
-                        }else{
-                            System.out.println("Choose other chip!");
+                        try {
+                            if (GameLogic.getInstance().executeMoves(actualPlayer, Integer.parseInt(actualPositionInput.getText()), dice2)) {
+                                System.out.println("Could execute with Dice2");
+                                System.out.println(GameLogic.getInstance().getTable());
+                                resetChips();
+                            }else{
+                                System.out.println("Choose other chip!");
+                            }
+                        } catch (IOException | ClassNotFoundException ioException) {
+                            ioException.printStackTrace();
                         }
                     }
                 }else{
@@ -237,6 +252,11 @@ public class TableGUI {
         });
         GridPane.setConstraints(button1, 0, 5);
         grid.getChildren().add(button1);
+
+        Button button2 = new Button("Close");
+        button2.setOnAction(e -> closeProgram());
+        GridPane.setConstraints(button2, 0, 6);
+        grid.getChildren().add(button2);
 
         //putCheckers(grid);
         List<Pair<Player, Integer>> arcs = GameLogic.getInstance().getTable().getArcs();
@@ -256,8 +276,6 @@ public class TableGUI {
                         GridPane.setConstraints(circle, 12 - i, 15 - (arc.getValue() - noOfChips));
                     }
                     GridPane.setMargin(circle, new Insets(0, 0, 0, 12));
-                    DragController dragController = new DragController(circle, true);
-                    dragController.isDraggableProperty().bind(new SimpleBooleanProperty(true));
                     grid.getChildren().add(circle);
                     noOfChips--;
                 }
@@ -274,8 +292,6 @@ public class TableGUI {
                         GridPane.setConstraints(circle, i - 10, arc.getValue() - noOfChips);
                     }
                     GridPane.setMargin(circle, new Insets(0, 0, 0, 12));
-                    DragController dragController = new DragController(circle, true);
-                    dragController.isDraggableProperty().bind(new SimpleBooleanProperty(true));
                     grid.getChildren().add(circle);
                     noOfChips--;
                 }
@@ -285,52 +301,7 @@ public class TableGUI {
         return grid;
     }
 
-    public void constructTableAgain(){
-        constructBaseTable();
-    }
-
-    public void constructTableFirst(){
-        stage = new Stage();
-        stage.setTitle("Backgammon Game");
-
-        stage.setOnCloseRequest(e -> {
-            e.consume();
-            closeProgram();
-        });
-
-        stackPane.getChildren().add(setTable());
-
-        stackPane.getChildren().add(play());
-    }
-
-    public Stage constructBaseTable(){
-        /*stage = new Stage();
-        stage.setTitle("Backgammon Game");
-
-        stage.setOnCloseRequest(e -> {
-            e.consume();
-            closeProgram();
-        });*/
-
-        /*if(!stage.getTitle().equals("Backgammon Game")){
-            constructTableFirst();
-        }*/
-
-        //stackPane = new StackPane();
-        //added table
-        //stackPane.getChildren().add(setTable());
-        //add chips
-        //Table table = new Table();
-
-        /*GridPane grid = new GridPane();
-        play(table, grid);
-        stackPane.getChildren().add(grid);*/
-
-        /*stackPane.getChildren().add(play());*/
-
-        //Scene scene = new Scene(stackPane, 750, 500);
-        /*Scene scene = new Scene(stackPane, 750, 500);
-        scene.setRoot(stackPane);*/
+    public static Stage constructBaseTable(){
         stage = new Stage();
         stage.setTitle("Backgammon Game");
 
@@ -348,7 +319,7 @@ public class TableGUI {
         return stage;
     }
 
-    private void closeProgram(){
+    private static void closeProgram(){
         boolean answer = ConfirmBox.display("Exit menu", "Sure you want to exit?");
         if(answer){
             stage.close();

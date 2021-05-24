@@ -8,6 +8,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * Clasa ConfirmBox este folosita pentru fereasta de confirmare in momentul in care un user doreste iesirea din joc
+ *
+ * @version May 2021
+ * @author Denisa Tiflea
+ */
+
 public class ConfirmBox {
 
     static boolean answer;

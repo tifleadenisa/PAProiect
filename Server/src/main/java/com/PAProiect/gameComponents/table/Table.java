@@ -3,18 +3,24 @@ package com.PAProiect.gameComponents.table;
 import com.PAProiect.gameComponents.Player;
 import com.PAProiect.utils.Pair;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Clasa Table este obiectul ce va fi transportat in retea cu ajutorul socketurilor, reprezentand modelul logic al unei table
+ *
+ * @version May 2021
+ * @author Denisa Tiflea
+ */
 
 public class Table implements Serializable {
     private static final long serialVersionUID = 6529685098267757690L;
     //a table has 24 arcs
     //on every arc there is a player(or not) with a number of chips
+    public Player playingUser = Player.NOPLAYER;
     public static Integer NOOFARCS = 24;
     private List<Pair<Player, Integer>> arcs;
     private Map<Player, Integer> hittedBlots;
@@ -100,6 +106,14 @@ public class Table implements Serializable {
         hittedBlots.put(Player.BLACK,0);
         hittedBlots.put(Player.WHITE, 0);
         hittedBlots.put(Player.NOPLAYER, 0);
+    }
+
+    public Player getPlayingUser() {
+        return playingUser;
+    }
+
+    public void setPlayingUser(Player playingUser) {
+        this.playingUser = playingUser;
     }
 
     public List<Pair<Player, Integer>> getArcs() {

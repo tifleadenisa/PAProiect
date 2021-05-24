@@ -3,6 +3,13 @@ package com.PAProiect.gameComponents;
 import com.PAProiect.gameComponents.table.Table;
 import com.PAProiect.utils.Pair;
 
+/**
+ * Clasa TableMovesOutside se ocupa de validarea si realizarea miscarilor odata ce un player are toate piesele in casa
+ *
+ * @version May 2021
+ * @author Denisa Tiflea
+ */
+
 public class TableMovesOutside {
     private Table table;
 

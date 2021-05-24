@@ -1,5 +1,4 @@
 package com.PAProiect.gameComponents;
-
 import java.util.Random;
 
 public class Dice {
@@ -20,3 +19,4 @@ public class Dice {
         return dice;
     }
 }
+
