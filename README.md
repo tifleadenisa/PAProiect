@@ -1,19 +1,28 @@
+# Backgammon
 # PA Project
+
 Backgammon in Java
 
-Aceasta aplicatie constituie proiectul final pentru materia Programare Avansata.
+This application is the final project for faculty's subject Advanced Programming.
 
-
-Proiectul are o parte din logica jocului de Backgammon, plus o reprezentare grafica a tablei de joc cu piesele aferente fiecarui jucator.
+The project has a part of the logic of the backgammon game, plus a graphic representation of the table with checkers for every player.
 
 ![img.png](img.png)
 
+
 Aplicatia se bazeaza pe comunicarea in retea, cu ajutorul socketurilor.
 
-Serverul contine clase folosite pentru a permite conectarea din partea a 2 clienti simultan si un handler pentru fiecare thread de client.
-De asemenea, in folderul aferent serverului putem gasi clase responsabile de logica tablei, printre care amintim: Player, Dice, Table.
 
-Deoarece cei doi playeri vor juca in fire de executie diferite, pentru a partaja tabla de joc se va folosi un singleton iar comunicarea dintre client si server va avea ca scop trimiterea/primirea tablei actualizate.
-	
-Clientul contine, pe langa clasa aferenta conectarii la server, clase pentru realizarea mutarilor (TableMovesInside, TableMovesOutside), clase utilitare pentru crearea logicii tablei (GameLogic, Table, Dice).
-De asemenea contine si elemente de Graphical User Interface: tabla de joc, piese, buton de generare zaruri si de realizare a mutarilor, boxuri de confirmare parasire joc.
+The server contains classes that are used for connecting two clients and a handler for every client thread.
+
+
+Also, in the server folder there are classes responsible for the logic of the table, like: Player, Dice, Table.
+
+
+Because the 2 players will play in different threads, for sharing the table we will use a singleton and the communication between the client and server will aim sending/receiving the updated table.
+
+
+The client contains, besides the class for connecting to server, classes for moving (TableMovesInside, TableMovesOutside), classes for table's logic (GameLogic, Table, Dice).
+
+
+The project also contains elements of Graphical User Interface: game table, checkers, dices generetor, box for confirming exiting the game.
