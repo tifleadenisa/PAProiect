@@ -10,7 +10,7 @@ The project has a part of the logic of the backgammon game, plus a graphic repre
 ![img.png](img.png)
 
 
-Aplicatia se bazeaza pe comunicarea in retea, cu ajutorul socketurilor.
+The application is based on network communication with sockets.
 
 
 The server contains classes that are used for connecting two clients and a handler for every client thread.
